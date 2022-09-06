@@ -1,0 +1,262 @@
+/* /
+/l to view total database
+/d to view tables
+\d+ to view tables full details
+\d+ table name to view table data type 
+
+database creation
+create database personal;
+
+databse deletion
+drop database personal;
+ 
+ \c databasename to change another database 
+ 
+ autoincreament 
+ serial
+ bigserial
+ 
+ create table
+ create table student(
+stdid bigserial primary key,
+stdname varchar(20) not null,
+stddept varchar(25) not null,
+stdyear int not null,
+stdmobno varchar(10) not null,
+stdclgname varchar(30) not null);
+ 
+ 
+ 
+ to select specified column
+ 
+ select stdid,stdname,stddept,stdclgname
+ from student;
+ 
+ change data type of column
+  alter table student alter column stdyear type varchar(80);
+  
+  change datatype of varchar to int 
+  alter table trial2 alter column urid type integer using(urid::integer);
+  
+      drop not null
+     alter table b alter column name drop not null;
+  
+  not null
+  alter table a alter column age set not null ;
+  
+  change column name
+  alter table student rename column stdid to id;
+  
+  order by
+	select * from student order by stdyear;
+    select * from student order by stdyear , stdid desc;
+    
+    distinct 
+    select distinct stdclgname , stddept from student order by stddept , stdclgname;
+    select distinct stdclgname , stddept from student order by stddept asc, stdclgname desc;
+    
+    where 
+    select * from student where stdclgname = 'aurcm';
+    select * from student where (stdclgname = 'aurcm' or stdclgname='srm')  and (stddept='cse' or stddept='ece');
+    
+    operators
+    <> not equal
+    balance normal
+    
+    limit and offset 
+    offset 8 ,,,after first 8 ....it will print from 8 to last
+    
+    select * from student limit 3; ..first 3
+    
+    select * from student offset 3; after 3
+    select * from student offset 10 limit 1; after 10 printing 1
+    
+    in
+    select * from student where stddept in (); 
+    select * from student where stddept in ('cse','ece') and stdclgname in ('aurcm');
+    select * from student where stddept in ('cse','ece') and stdclgname in ('aurcm');
+    select * from student where stddept in ('cse','ece') order by stdyear;
+    
+    between
+    select * from student where stdyear between '1' and '2'  order by stdyear;
+    select * from student where stdyear between '1' and '2'  ;
+    
+    like
+    select * from student where stdmobno like '99%';
+    select * from student where stdmobno like '__456%';
+    select * from student where stdmobno like '%775';
+    select * from student where stdmobno like '%990%';
+    
+    group by
+    select count(*) ,stddept from student group by stddept;
+    
+    group by having
+    select count(*) , stdclgname from student group by stdclgname having count(*) >=4 ;
+    select count(*) , stdclgname from student group by stdclgname having stdclgname='aurcm';
+    
+    delete
+    delete from trial; delete all rec from table
+    
+    delete from trial2 where id=2 and name='saran;
+
+    update
+    update trial2 set name='vignesh' ,id=143,age=21 where id=1;
+    
+    
+    keys
+    unique instead of unique key
+    only unique
+    
+    check 
+    alter table trial2 drop constraint  check_cons ;
+    alter table trial2 add constraint check_cons check(age=21 or age=22 or age=23);
+    
+    primary key
+    alter table trial2 add primary key(id);
+    
+    foreign key
+    alter table submarks add foreign key(stdid) references student(stdid);
+    
+    unique
+     alter table trial2 add constraint check_cons unique(age);
+     
+     on conflict do nothing
+     when we try add duplicate ie same row on unique or primary key column it will show error duplicate violates
+     for that we we can use on conflict do nothing
+     it is like an exception handling alterthis is only for unique or pk only
+     this is valid only when one column is unique or primary key
+     
+     insert into clg values('aurcm',9100,'madurai','1234567890') on conflict do nothing;
+     insert into clg values('aurcm',9100,'madurai','1234567890') on conflict (clgid) do nothing;
+     
+     this will show error because clgmobno is not unique
+     insert into clg values('aurcm',9100,'madurai','1234567890') on conflict (clgmobno) do nothing;
+     
+     on conflict do update 
+     insert into trial2 values('vignesh',4,29) on conflict(id) do update set age=excluded.age , name=excluded.name;
+     insert into trial2 values('vignesh',4,29) on conflict(id) do update set age=excluded.age;
+     
+     drop
+     alter table trial drop column age;.....it will delete the column fully including column name
+     
+     add column
+     alter table trial add column id int ;
+     
+     foreign key
+     create table submarks( stdid int not null , subid varchar(20) not null references sub(subid), submarks int not null ;
+     create table submarks( stdid int not null , ubmarks int not null ,constraint stdid_fk foreign key(stdid) references student(stdid));
+     
+     on delete cascade
+     alter table b add foreign key (name) references a(name) on delete cascade ;
+     it will delete name on both table;
+     by default it will show error 
+     on delete cascade ...it will delete records on child table
+     on delete set null....it will set null value to child refered column
+     on delete  set default ...it will set dafault value ie...null value
+     
+     
+     bigserial or serial
+     alter sequence aa_inte_seq  restart with 11;
+     this will increment from 11
+     
+     on alter
+     CREATE SEQUENCE temp_id_seq;
+		ALTER TABLE temp ALTER COLUMN id SET NOT NULL;
+		ALTER TABLE temp ALTER COLUMN id SET DEFAULT nextval('temp_id_seq');
+		ALTER SEQUENCE temp_id_seq OWNED BY temp.id;
+
+	this is enough
+	 CREATE SEQUENCE temp_id_seq;
+	ALTER TABLE temp ALTER COLUMN id SET DEFAULT nextval('temp_id_seq');
+    
+    drop bigserial
+    alter table trial2 alter column age drop default;
+
+     
+     /* joins  */
+
+/* Inner join */
+ select student.stdname , student.stddept , clg.clgname , clg.clgid 
+ from student 
+ inner join clg  on student.stdclgname = clg.clgname ;
+ 
+ select  student.stdid , student.stdname , sub.subname , submarks.submarks ,student.stdclgname
+ from (student inner join submarks on student.stdid=submarks.stdid )
+ inner join sub on sub.subid=submarks.subid 
+ order by submarks desc;
+ 
+ select count(*) as count_of_marks, student.stdid , student.stdname  ,student.stdclgname , submarks.submarks
+ from (student inner join submarks on student.stdid=submarks.stdid )
+ inner join sub on sub.subid=submarks.subid 
+ where submarks >=50
+  group by stdname
+ order by submarks desc;
+ 
+ /* left join */
+ select *
+from trial
+left join student on student.stdname=trial.urname;
+
+
+select *
+from student
+left join clg on student.stdclgname=clg.clgname;
+
+delete from trial;
+
+select *
+from student
+left join trial on student.stdname=trial.urname;
+
+/* Right join */
+select sub.subid , submarks.stdid , sub.subname
+from submarks
+left join sub on submarks.subid=sub.subid;
+
+/*  Full join */
+select *
+from student
+full join clg on student.stdclgname=clg.clgname;
+
+/* min , max , avg , count , sum  , round */
+
+select min(stdyear) as firstyear , max(stdid) as max_id
+from student;
+
+select count(stdyear) as count_year ,sum(stdyear) as total_year , avg(stdyear) as avg_year
+from student;
+select round(avg(stdid)) from student;
+ 
+/* IS NULL & IS NOT NULL*/
+select * from student 
+where stddept is null or stddept is not null;
+
+/* And Or Not*/
+select * from student 
+where ((stdyear = 4 and not stddept = 'ece') or  (stdyear = 4  and not stddept ='cse') ) and not stdname = 'parthi' ; 
+
+/*
+if u want to know the age of a peron
+select id ,dob , age(now(),dob) as your age from student;
+
+
+not ok
+select distinct stdclgname from (select sum (submarks.submarks) as rank, student.stdname ,student.stddept,student.stdmobno,student.stdyear , student.stdclgname from (student inner join submarks on student.stdid=submarks.stdid) inner join sub on submarks.subid=sub.subid group by student.stdname , student.stdclgname ,student.stddept,student.stdmobno,student.stdyear  order by rank desc) as x ;
+
+ok
+select  stdclgname ,max(total_marks) as total_marks from (select sum (submarks.submarks) as total_marks,student.stdclgname from (student inner join submarks on student.stdid=submarks.stdid) inner join sub on submarks.subid=sub.subid group by student.stdname , student.stdclgname  order by total_marks desc) as x group by stdclgname order by total_marks desc;
+
+***********************************
+not ok
+select sum (submarks.submarks) as rank,student.stdname ,max(student.stddept),max(student.stdmobno),max(student.stdyear) , max(student.stdclgname )from (student inner join submarks on student.stdid=submarks.stdid) inner join sub on submarks.subid=sub.subid group by student.stdname order by rank desc;
+ok
+select sum (submarks.submarks) as rank, student.stdname ,student.stddept,student.stdmobno,student.stdyear , student.stdclgname from (student inner join submarks on student.stdid=submarks.stdid) inner join sub on submarks.subid=sub.subid group by student.stdname , student.stdclgname ,student.stddept,student.stdmobno,student.stdyear  order by rank desc;
+not ok
+select sum (submarks.submarks) as rank, student.stdname , student.stdclgname from (student inner join submarks on student.stdid=submarks.stdid) inner join sub on submarks.subid=sub.subid group by student.stdname , student.stdclgname order by rank desc;
+********************************************************
+
+select student.stdname,student.stdmobno,student.stdyear,student.stdclgname ,sub.subname,submarks.submarks from (student inner join submarks on student.stdid=submarks.stdid) inner join sub on submarks.subid=sub.subid where   submarks.submarks=(select max(submarks.submarks) from submarks inner join sub on sub.subid=submarks.subid where sub.subname='maths') and sub.subname='maths';
+     
+     *******************************************************
+      select * from (student inner join submarks on student.stdid=submarks.stdid) inner join sub on sub.subid=submarks.subid;
+     

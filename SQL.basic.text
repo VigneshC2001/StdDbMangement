@@ -1,0 +1,267 @@
+/*create database */
+create database school;
+use school;
+
+
+/*creating table*/
+create table student(
+stdid int not null  auto_increment primary key,
+stdname varchar(20) not null,
+stddept varchar(25) not null,
+stdyear int not null,
+stdmobno varchar(10) not null,
+stdclgname varchar(30) not null);
+
+/* showing table &status */
+show table status;
+show tables;
+
+/* displaying full table */
+select*from student;
+
+/* inserting values */
+insert into student(stdname,stddept,stdyear,stdmobno,stdschlname)
+values('vignesh','cse',4,'9942967089','sree saravana niketan'),
+("parthi","cse",4,"9966367089","ssn"),
+("jani","ece",4,"9942123489","srm"),
+("mahesh","civile",3,"9367967089","irtt");
+
+/* distinct ...different values */
+select distinct stdyear 
+from student;
+
+/* count */
+select count(distinct stdyear) from student;
+
+ /*  AS */
+select count(distinct stdyear ) as counted 
+from student;
+
+/* where */
+select * from student 
+where stdyear = 4 and stddept = 'cse';
+
+select  stdname ,stdmobno , stdschlname
+from student
+where stdname ='parthi';
+
+/* And Or Not*/
+select * from student 
+where ((stdyear = 4 and not stddept = 'ece') or  (stdyear = 4  and not stddept ='cse') ) and not stdname = 'parthi' ; 
+
+/* order by */
+select * from student
+order by stdname desc	, stdyear asc  ;
+
+select stdname , stdmobno , stddept
+from student 
+order by  stdmobno , stdname ;
+
+ /* insert into */
+ insert into student(stdname , stddept,  stdyear , stdmobno , stdschlname)
+ values('manish',"mech",1,"8670491113","aurcm");
+ 
+ insert into student(stdname , stddept,  stdyear , stdmobno , stdschlname)
+ values('mani',"mech",2,"8670412313","aurcm");
+ 
+/* IS NULL & IS NOT NULL*/
+select * from student 
+where stddept is null or stddept is not null;
+
+/* in below if the condition want 3 and also not wants 3 means 
+it will take the 1st condition and give the result */ 
+select * from student where  stdyear = 3 and stddept !=3 ; 
+
+/* update modifies existing records */
+
+update student
+set stddept='eee'
+where stdid = 2;
+
+update student
+set stdyear =2 , stdschlname = 'vellamammal'
+where stdid =1;
+
+create table trial(
+urname varchar(17) not null,
+urage int not null,
+urnative varchar(29) not null);
+
+insert into trial
+values ('vicky',15,'erode'),('preethi',18,'salem');
+insert into trial
+values ('vignesh',15,'erode'),('parthi',18,'salem');
+
+select * from trial;
+drop table trial;
+
+/* delete */
+delete from trial where urname = 'preethi' ;
+
+delete from trial;
+
+/* top ie limit */
+select * from trial 
+limit  3 ;
+
+select * from trial 
+where urname='vicky'
+limit 4;
+
+/* min , max , avg , count , sum */
+
+select min(stdyear) as firstyear , max(stdid) as max_id
+from student;
+
+select count(stdyear) as count_year ,sum(stdyear) as total_year , avg(stdyear) as avg_year
+from student;
+
+/* like */
+
+select * from student 
+where stdid  like '%1' ;
+
+select * from student
+where stdmobno like '%42%' ;
+
+select * from student
+where stdname not like '_i%';
+
+/* in */
+
+select * from student
+where stdyear in (1);
+
+select * from student 
+where stdname in (select urname from trial);
+
+select * from student 
+where stdyear not in (2);
+
+/* view datatype for columns*/
+show columns from student ;
+describe student;
+
+/* change column name and datatype*/
+alter table student 
+change column stdschlname stdclgname varchar(50) not null;
+
+alter table student 
+change column  stdclgname  stdschlname varchar(30);
+
+/* to change datatype only */
+alter table student 
+modify column stdclgname varchar(40) not null;
+
+/* changing coln name */
+alter table student
+rename column stdschlname to stdclgname;
+
+
+create table clg(
+clgname varchar(45) not null primary key,
+clgid  int unique key not null,
+clglocation varchar(30) not null,
+clgmobno varchar(10) not null);
+
+insert into clg
+values('aurcm',9100,'madurai','6712309845'),
+('ssn',8100,'erode','6712309876'),
+('srm',7100,'chennai','8142309876'),
+('irtt',6100,'erode','6709345876'),
+('vellamammal',1100,'salem','9237609876');
+
+select *from student;
+
+create table sub(
+subid varchar(20) not null primary key , 
+subname varchar(25) not null unique key );
+
+insert into sub
+values('m111', 'maths' ) ,
+ ('p222', 'physics' ) ,
+ ('c333', 'chemistry' ) ,
+ ('c444', 'cse' ) ,
+ ('t555', 'tamil' ) ,
+ ('e666', 'english' ) ;
+ 
+ create table submarks(
+ stdid int not null ,
+ subid varchar(20) not null,
+ submarks int not null );
+ 
+ insert into submarks
+ values(1,'p222',80),(1,'m111',90) ,(1,'c333',70) ,(1,'c444',100) ,(1,'t555',60) ,(1,'e666',70) ,
+ (2,'p222',50),(2,'m111',50) ,(2,'c333',90) ,(2,'c444',100) ,(2,'t555',100) ,(2,'e666',60) ,
+ (3,'p222',60),(3,'m111',80) ,(3,'c333',20) ,(3,'c444',100) ,(3,'t555',80) ,(3,'e666',40) ,
+ (4,'p222',20),(4,'m111',30) ,(4,'c333',100) ,(4,'c444',100) ,(4,'t555',40) ,(4,'e666',80) ,
+ (5,'p222',90),(5,'m111',20) ,(5,'c333',90) ,(5,'c444',100) ,(5,'t555',50) ,(5,'e666',70) ,
+ (6,'p222',40),(6,'m111',90) ,(6,'c333',60) ,(6,'c444',100) ,(6,'t555',30) ,(6,'e666',90) ;
+
+select * from clg;
+
+show tables;
+
+/* joins  */
+
+/* Inner join */
+ select student.stdname , student.stddept , clg.clgname , clg.clgid 
+ from student 
+ inner join clg  on student.stdclgname = clg.clgname ;
+ 
+ select  student.stdid , student.stdname , sub.subname , submarks.submarks ,student.stdclgname
+ from (student inner join submarks on student.stdid=submarks.stdid )
+ inner join sub on sub.subid=submarks.subid 
+ order by submarks desc;
+ 
+ select count(*) as count_of_marks, student.stdid , student.stdname  ,student.stdclgname , submarks.submarks
+ from (student inner join submarks on student.stdid=submarks.stdid )
+ inner join sub on sub.subid=submarks.subid 
+ where submarks >=50
+  group by stdname
+ order by submarks desc;
+ 
+ /* left join */
+ select *
+from trial
+left join student on student.stdname=trial.urname;
+
+
+select *
+from student
+left join clg on student.stdclgname=clg.clgname;
+
+delete from trial;
+
+select *
+from student
+left join trial on student.stdname=trial.urname;
+
+/* Right join */
+select sub.subid , submarks.stdid , sub.subname
+from submarks
+left join sub on submarks.subid=sub.subid;
+
+/*  Full join */
+select *
+from student
+full join trial ;
+
+
+select *
+from student
+full join clg on student.stdclgname=clg.clgname;
+
+ create table suk(
+ stdid int not null default 1,
+ subid varchar(20) not null default 'eee',
+ submarks int not null default 90,
+ check (submarks >=50));
+ 
+ insert into suk (stdid)
+ values(1);
+select * from suk;
+delete from su;
+drop table su;
+
+
