@@ -1,0 +1,111 @@
+git commands 
+
+to create new directory ie new folders
+mkdir student
+
+to change the directory
+cd student
+
+list all files in the folder in current directory
+ls
+
+this will take back to the previous directory
+cd ..
+
+to create username and email for working with gitbash
+git config --global user.name "vignesh"
+git config --global user.email  "vicky.swag.2001@gmail.com"
+
+
+to clear screen 
+clear
+
+to check our username & email
+git config --global user.name 
+git config --global user.email  
+
+print working directory
+pwd
+
+long format details list of long directory
+ls -l
+
+ to check whether it is installed corrctly
+git help
+
+to create repository
+git init
+
+to know the status of a file 
+git status
+ie ..,
+On branch master
+No commits yet
+nothing to commit (create/copy files and use "git add" to track)
+
+to create a file inside this directory
+touch demo.txt
+
+to add file 
+git add demo.txt
+
+above file will be added to a staging area
+and then we have to commit
+git commit -m "day 16 first commit"
+
+[in cmd]
+to change directory
+e: 
+
+to change to the file path
+cd filename 
+
+to connect both the repository
+add origin
+git remote add origin https://github.com/VigneshC2001/day16.git
+set url origin
+git remote set-url origin https://github.com/VigneshC2001/day16.git
+
+to list all of the remote repositories in my github account
+git remote -v
+git remote
+
+pushing the file from local repo to remote repo
+git push orgin master
+
+shortcut for all above lines to change to existing directory just 
+open that location
+right click
+and enter git bash here
+that will change to that directory
+
+to list branch in repo
+git branch
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ 
